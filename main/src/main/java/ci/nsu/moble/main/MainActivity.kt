@@ -1,5 +1,6 @@
 package ci.nsu.moble.main
 
+import android.content.Intent
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
@@ -23,101 +24,47 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 
-val colorPalette = mapOf(
-    "red" to Color.Red,
-    "blue" to Color.Blue,
-    "green" to Color.Green,
-    "yellow" to Color.Yellow,
-    "magenta" to Color.Magenta,
-    "black" to Color.Black
-)
-
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge() // Content goes under status bar
         setContent {
-            MobilepracticeTheme {
-                // Makes right padding
-                Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
-                    // Calling screen
-                    ColorSearchScreen(modifier = Modifier.padding(innerPadding))
+            // 1. Вызываем Composable и передаем в него ЛЯМБДУ (блок кода)
+            MainScreen(onNavigate = { data ->
+                // Этот код выполнится ТОЛЬКО когда нажмут кнопку в MainScreen
+                val intent = Intent(this, SecondActivity::class.java).apply {
+                    putExtra("ci.nsu.saikou.EXTRA_DATA", data)
                 }
-            }
+                startActivity(intent)
+            })
         }
     }
 }
 
 @Composable
-fun ColorSearchScreen(modifier: Modifier = Modifier) {
-    // Состояние: текст в поле и текущий цвет кнопки
-    var searchQuery by remember { mutableStateOf("") }
-    var buttonColor by remember { mutableStateOf(Color.Gray) }
+fun MainScreen(onNavigate: (String) -> Unit) { // Принимаем функцию как параметр
+    var textToPass by remember { mutableStateOf("Привет из главной!") }
 
     Column(
-        modifier = modifier
-            .fillMaxSize()
-            .padding(16.dp),
+        modifier = Modifier.fillMaxSize(),
+        verticalArrangement = Arrangement.Center,
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
-        Text(
-            text = "Поиск цвета",
-            style = MaterialTheme.typography.headlineMedium
+        // Поле ввода, чтобы данные были динамическими
+        TextField(
+            value = textToPass,
+            onValueChange = { textToPass = it },
+            label = { Text("Что передать?") }
         )
 
         Spacer(modifier = Modifier.height(16.dp))
 
-        // Поле ввода названия цвета
-        OutlinedTextField(
-            value = searchQuery,
-            onValueChange = { searchQuery = it },
-            label = { Text("Например: Red") },
-            modifier = Modifier.fillMaxWidth()
-        )
-
-        Spacer(modifier = Modifier.height(16.dp))
-
-        // Кнопка, которая меняет цвет
-        Button(
-            onClick = {
-                val foundColor = colorPalette[searchQuery.trim().lowercase()]
-                if (foundColor != null) {
-                    buttonColor = foundColor
-                } else {
-                    Log.d("ColorSearch", "Пользовательский цвет \"$searchQuery\" не найден")
-                }
-            },
-            colors = ButtonDefaults.buttonColors(containerColor = buttonColor),
-            modifier = Modifier.fillMaxWidth()
-        ) {
-            Text("Применить цвет")
-        }
-
-        Spacer(modifier = Modifier.height(32.dp))
-
-        // Дополнительно: Список всей палитры
-        Text("Доступные цвета:", style = MaterialTheme.typography.titleMedium)
-
-        LazyColumn(
-            modifier = Modifier.fillMaxWidth(),
-            contentPadding = PaddingValues(vertical = 8.dp)
-        ) {
-            items(colorPalette.toList()) { (name, color) ->
-                Row(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(vertical = 4.dp),
-                    verticalAlignment = Alignment.CenterVertically
-                ) {
-                    Box(
-                        modifier = Modifier
-                            .size(30.dp)
-                            .background(color)
-                    )
-                    Spacer(modifier = Modifier.width(12.dp))
-                    Text(text = name.replaceFirstChar { it.uppercase() })
-                }
-            }
+        // 2. Использование onNavigate
+        Button(onClick = {
+            // Вызываем переданную функцию и отдаем ей строку
+            onNavigate(textToPass)
+        }) {
+            Text("Перейти во вторую Activity")
         }
     }
 }

@@ -55,6 +55,8 @@ dependencies {
     implementation("androidx.compose.ui:ui-graphics")
     implementation("androidx.compose.ui:ui-tooling-preview")
     implementation("androidx.compose.material3:material3")
+    implementation("androidx.compose.material3:material3:1.4.0")
+    implementation("androidx.navigation:navigation-compose:2.9.7")
     testImplementation("junit:junit:4.13.2")
     androidTestImplementation("com.android.support.test:runner:1.0.2")
     androidTestImplementation("com.android.support.test.espresso:espresso-core:3.0.2")
@@ -62,4 +64,8 @@ dependencies {
     androidTestImplementation("androidx.compose.ui:ui-test-junit4")
     debugImplementation("androidx.compose.ui:ui-tooling")
     debugImplementation("androidx.compose.ui:ui-test-manifest")
+    // Основная библиотека иконок
+    implementation("androidx.compose.material:material-icons-core")
+    // Расширенная библиотека иконок (Settings, ArrowBack и др.)
+    implementation("androidx.compose.material:material-icons-extended")
 }
