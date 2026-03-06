@@ -1,4 +1,4 @@
-package ci.nsu.moble.main.ui
+package ci.nsu.moble.main.ui.screens
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
@@ -32,9 +32,9 @@ import ci.nsu.moble.main.viewmodel.ColorPickerViewModel
 fun ColorPickerScreen(
     colorViewModel: ColorPickerViewModel = viewModel()
 ) {
-    // UI реагирует на изменения состояния через collectAsStateWithLifecycle
+    // subscribe to colorViewModel.uiState
     val uiState by colorViewModel.uiState.collectAsStateWithLifecycle()
-    // Создаем состояние скролла
+
     val scrollState = rememberScrollState()
     Column(
         modifier = Modifier
@@ -44,7 +44,7 @@ fun ColorPickerScreen(
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.Center
     ) {
-        // Предпросмотр цвета
+        // Color Preview
         Box(
             modifier = Modifier
                 .size(150.dp)
@@ -60,10 +60,10 @@ fun ColorPickerScreen(
 
         Spacer(modifier = Modifier.height(32.dp))
 
-        // Слайдеры
-        ColorSlider(name = "Red", value = uiState.red, onValueChange = colorViewModel::onRedChanged)
-        ColorSlider(name = "Green", value = uiState.green, onValueChange = colorViewModel::onGreenChanged)
-        ColorSlider(name = "Blue", value = uiState.blue, onValueChange = colorViewModel::onBlueChanged)
+        // Sliders
+        ColorSlider(name = "Red", value = uiState.red, onValueChange = {colorViewModel.update(red = it.toInt())})
+        ColorSlider(name = "Green", value = uiState.green, onValueChange = {colorViewModel.update(green = it.toInt())})
+        ColorSlider(name = "Blue", value = uiState.blue, onValueChange = {colorViewModel.update(blue = it.toInt())})
 
         Spacer(modifier = Modifier.height(16.dp))
 

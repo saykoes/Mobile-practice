@@ -7,7 +7,6 @@ import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 
-// Используется StateFlow для UiState
 data class ColorUiState(
     val red: Int = 128,
     val green: Int = 128,
@@ -20,22 +19,13 @@ data class ColorUiState(
 }
 
 class ColorPickerViewModel : ViewModel() {
-    // Приватный MutableStateFlow для изменения внутри
+    // Using MutableStateFlow for local UiState
     private val _uiState = MutableStateFlow(ColorUiState())
-    // Публичный StateFlow для чтения в UI
+    // Public StateFlow for UI
     val uiState: StateFlow<ColorUiState> = _uiState.asStateFlow()
 
-    // Нет прямого изменения UI (только обновление данных состояния)
-    fun onRedChanged(newValue: Float) {
-        _uiState.update { it.copy(red = newValue.toInt()) }
-    }
-
-    fun onGreenChanged(newValue: Float) {
-        _uiState.update { it.copy(green = newValue.toInt()) }
-    }
-
-    fun onBlueChanged(newValue: Float) {
-        _uiState.update { it.copy(blue = newValue.toInt()) }
+    fun update(red: Int = uiState.value.red, green: Int = uiState.value.green, blue: Int = uiState.value.blue) {
+        _uiState.update { it.copy(red = red, green = green, blue = blue) }
     }
 
     fun generateRandomColor() {
