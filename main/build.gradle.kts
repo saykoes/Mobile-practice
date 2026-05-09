@@ -2,7 +2,8 @@ plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.kotlin.android)
     alias(libs.plugins.kotlin.compose)
-    alias(libs.plugins.google.ksp)
+    alias(libs.plugins.kotlin.serialization) // for JSON
+    alias(libs.plugins.kotlin.parcelize)
 }
 
 android {
@@ -54,19 +55,24 @@ dependencies {
     implementation(libs.androidx.material3)
     implementation(libs.material)
 
-    // Navigation & Room
-    implementation(libs.androidx.navigation.compose)
-    implementation(libs.room.runtime)
-    implementation(libs.room.ktx)
-    implementation(libs.ads.mobile.sdk)
-    ksp(libs.room.compiler)
+    // Network
+    implementation(libs.retrofit.core)
+    implementation(libs.retrofit.serialization)
+    implementation(libs.okhttp.core)
+    implementation(libs.okhttp.logging)
 
-    // Test
-    testImplementation(libs.junit)
-    androidTestImplementation(libs.androidx.junit)
-    androidTestImplementation(libs.androidx.espresso.core)
-    androidTestImplementation(platform(libs.androidx.compose.bom))
-    androidTestImplementation(libs.androidx.ui.test.junit4)
+    // JSON
+    implementation(libs.kotlinx.serialization.json)
+
+    // UI & nav
+    implementation(libs.androidx.lifecycle.viewmodel.compose)
+    implementation(libs.androidx.lifecycle.runtime.compose)
+    implementation(libs.androidx.navigation.compose)
+
+    // Coroutines
+    implementation(libs.kotlinx.coroutines.android)
+    implementation(libs.androidx.compose.material3)
+    implementation(libs.androidx.compose.material.icons.extended)
 
     debugImplementation(libs.androidx.ui.tooling)
     debugImplementation(libs.androidx.ui.test.manifest)
